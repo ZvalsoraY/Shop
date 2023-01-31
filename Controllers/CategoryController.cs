@@ -20,5 +20,24 @@ namespace Shop.Controllers
             IEnumerable<Category> objList = _db.Category;
             return View(objList);
         }
+        // get - create
+        public IActionResult Create()
+        {
+            return View();
+        }
+        // post - create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Category obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Category.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+            //return View();
+        }
     }
 }
