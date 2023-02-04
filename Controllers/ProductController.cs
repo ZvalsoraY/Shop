@@ -38,7 +38,8 @@ namespace Shop.Controllers
                 Value = i.Id.ToString()
             });
 
-            ViewBag.CategoryDropDown = CategoryDropDown;
+            //ViewBag.CategoryDropDown = CategoryDropDown;
+            ViewData["CategoryDropDown"] = CategoryDropDown;
 
             Product product = new Product();
             if (id == null)
