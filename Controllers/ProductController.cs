@@ -26,12 +26,14 @@ namespace Shop.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> objList = _db.Product;
+            IEnumerable<Product> objList = _db.Product.Include(u => u.Category).Include(u => u.ApplicationType);
+            //IEnumerable<Product> objList = _db.Product;
 
-            foreach (var obj in objList)
-            {
-                obj.Category = _db.Category.FirstOrDefault(u => u.Id == obj.CateroryId);
-            }
+            //foreach (var obj in objList)
+            //{
+            //    obj.Category = _db.Category.FirstOrDefault(u => u.Id == obj.CateroryId);
+            //    obj.ApplicationType = _db.ApplicationType.FirstOrDefault(u => u.Id == obj.ApplicationTypeId);
+            //}
 
             return View(objList);
         }
@@ -57,7 +59,13 @@ namespace Shop.Controllers
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
+                }),
+                ApplicationTypeSelectList = _db.ApplicationType.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
                 })
+
             };
 
             if (id == null)
@@ -141,6 +149,11 @@ namespace Shop.Controllers
                 Text = i.Name,
                 Value = i.Id.ToString()
             });
+            productVM.ApplicationTypeSelectList = _db.ApplicationType.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
             return View(productVM);
         }
 
@@ -153,7 +166,7 @@ namespace Shop.Controllers
                 return NotFound();
             }
 
-            Product product = _db.Product.Include(u=>u.Category).FirstOrDefault(u=>u.Id==id);
+            Product product = _db.Product.Include(u=>u.Category).Include(u=>u.ApplicationType).FirstOrDefault(u=>u.Id==id);
             //product.Category = _db.Category.Find(product.CateroryId);
             if (product == null)
             {
