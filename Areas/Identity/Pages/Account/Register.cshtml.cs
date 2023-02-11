@@ -95,7 +95,16 @@ namespace Shop.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-
+                    if (User.IsInRole(WC.AdminRole))
+                    {
+                        //an admin has logged in and they try to create a new user
+                        await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, WC.CustomerRole);
+                    }
+                    await _userManager.AddToRoleAsync(user, WC.AdminRole);
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
