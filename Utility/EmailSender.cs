@@ -17,45 +17,84 @@ namespace Shop.Utility
 
         public async Task Execute(string email, string subject, string body)
         {
-            MailjetClient client = new MailjetClient("d985a008719033368b56193f7f5c7cd5", "93a9523140163a78a9e3e12bdf1f044b")
+            MailjetClient client = new MailjetClient("a950301d1394175244c61a60c54e47f2", "01ac818f59907731883bea2c5d4fa420")
             {
                 Version = ApiVersion.V3_1,
             };
             MailjetRequest request = new MailjetRequest
-                {
-                    Resource = Send.Resource,
-                }
-                .Property(Send.Messages, new JArray {
-                    new JObject {
-                        {
-                            "From",
-                            new JObject {
-                                {"Email", "yamailpo4ta@gmail.com"},
-                                {"Name", "Yaroslav"}
-                            }
-                        }, {
-                            "To",
-                            new JArray {
-                                new JObject {
-                                    {
-                                        "Email",
-                                        email
-                                    }, {
-                                        "Name",
-                                        "DotNetMastery"
-                                    }
-                                }
-                            }
-                        }, {
-                            "Subject",
-                            subject
-                        }, {
-                            "HTMLPart",
-                            body
-                        }
-                    }
-                });
+            {
+                Resource = Send.Resource,
+            }
+             .Property(Send.Messages, new JArray {
+     new JObject {
+      {
+       "From",
+       new JObject {
+        {"Email", "everymailfor@proton.me"},
+        {"Name", "Yaroslav"}
+       }
+      }, {
+       "To",
+       new JArray {
+        new JObject {
+         {
+          "Email",
+          email
+         }, {
+          "Name",
+          "DotNetMastery"
+         }
+        }
+       }
+      }, {
+       "Subject",
+       subject
+      },  {
+       "HTMLPart",
+       body
+         }
+     }
+             });
             await client.PostAsync(request);
+            //MailjetClient client = new MailjetClient("d985a008719033368b56193f7f5c7cd5", "93a9523140163a78a9e3e12bdf1f044b")
+            //{
+            //    Version = ApiVersion.V3_1,
+            //};
+            //MailjetRequest request = new MailjetRequest
+            //    {
+            //        Resource = Send.Resource,
+            //    }
+            //    .Property(Send.Messages, new JArray {
+            //        new JObject {
+            //            {
+            //                "From",
+            //                new JObject {
+            //                    {"Email", "everymailfor@proton.me"},
+            //                    {"Name", "Yaroslav"}
+            //                }
+            //            }, {
+            //                "To",
+            //                new JArray {
+            //                    new JObject {
+            //                        {
+            //                            "Email",
+            //                            "everymailfor@proton.me"
+            //                        }, {
+            //                            "Name",
+            //                            "everymailfor"
+            //                        }
+            //                    }
+            //                }
+            //            }, {
+            //                "Subject",
+            //                subject
+            //            }, {
+            //                "HTMLPart",
+            //                body
+            //            }
+            //        }
+            //    });
+            //await client.PostAsync(request);
         }
     }
 }
