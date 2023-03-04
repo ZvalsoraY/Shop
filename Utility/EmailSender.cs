@@ -5,11 +5,20 @@ using Mailjet.Client;
 using Mailjet.Client.Resources;
 using System;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace Shop.Utility
 {
     public class EmailSender : IEmailSender
     {
+        private readonly IConfiguration _configuration;
+        public MailJetSettings _mailJetSettings { get; set; }
+
+        public EmailSender(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             return Execute(email, subject, htmlMessage);
@@ -17,7 +26,9 @@ namespace Shop.Utility
 
         public async Task Execute(string email, string subject, string body)
         {
-            MailjetClient client = new MailjetClient("a950301d1394175244c61a60c54e47f2", "01ac818f59907731883bea2c5d4fa420")
+            _mailJetSettings = _configuration.GetSection("MailJet").Get<MailJetSettings>();
+
+            MailjetClient client = new MailjetClient(_mailJetSettings.ApiKey, _mailJetSettings.SecretKey)
             {
                 Version = ApiVersion.V3_1,
             };
