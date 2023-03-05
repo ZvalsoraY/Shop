@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop.Data;
 using Shop.Models;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Shop.Controllers
 {
+    [Authorize(Roles = WC.AdminRole)]
+
     public class ApplicationTypeController : Controller
     {
+        
         private readonly ApplicationDbContext _db;
 
         public ApplicationTypeController(ApplicationDbContext db)

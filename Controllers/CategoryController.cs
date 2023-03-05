@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Data;
 using Shop.Models;
 
 namespace Shop.Controllers
 {
+    [Authorize(Roles = WC.AdminRole)]
+
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _db;

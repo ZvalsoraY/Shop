@@ -3,9 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Data;
 using Shop.Models;
@@ -19,12 +21,14 @@ namespace Shop.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IEmailSender _emailSender;
         [BindProperty]
         public ProductUserVM ProductUserVM { get; set; }
-        public CartController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        public CartController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -81,7 +85,7 @@ namespace Shop.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public IActionResult SummaryPost(ProductUserVM ProductUserVM)
+        public async Task<IActionResult> SummaryPost(ProductUserVM ProductUserVM)
         {
             var PathToTemplate = _webHostEnvironment.WebRootPath + Path.DirectorySeparatorChar.ToString()
                 +"templates" + Path.DirectorySeparatorChar.ToString()
@@ -107,6 +111,8 @@ namespace Shop.Controllers
                 ProductUserVM.ApplicationUser.Email,
                 ProductUserVM.ApplicationUser.PhoneNumber,
                 productListSB.ToString());
+
+            await _emailSender.SendEmailAsync(WC.EmailAdmin, subject, messageBody);
 
             return RedirectToAction(nameof(InquiryConfirmation));
         }
