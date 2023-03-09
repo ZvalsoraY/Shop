@@ -104,7 +104,7 @@ namespace Shop.Areas.Identity.Pages.Account
                     {
                         await _userManager.AddToRoleAsync(user, WC.CustomerRole);
                     }
-                    await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                    //await _userManager.AddToRoleAsync(user, WC.AdminRole);////////
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
